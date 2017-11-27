@@ -20,6 +20,20 @@ Use the following Maven command:
 
 `java -jar target/benchmarks.jar`
 
+###Alternative for running the benchmarks (without any Maven commands)
+use <a href="http://javadox.com/org.openjdk.jmh/jmh-core/1.6.2/org/openjdk/jmh/runner/Runner.html">org.openjdk.jmh.runner.Runner</a>
+
+`public static void main(String[] args) throws RunnerException {`\
+`Options opt = new OptionsBuilder()`\
+                `.include(RandomStringsTests.class.getSimpleName())`\
+                `.warmupIterations(5)`\
+                `.measurementIterations(5)`\
+                `.forks(1)`\
+                `.build();`
+
+`new Runner(opt).run();`\
+`}`
+
 ###Sample output
 
  `Warmup: 1 iterations, 1 s each`\
