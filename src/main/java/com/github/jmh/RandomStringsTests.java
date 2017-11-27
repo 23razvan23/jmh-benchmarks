@@ -6,24 +6,19 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-import java.lang.management.GarbageCollectorMXBean;
-import java.lang.management.ManagementFactory;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.IntStream;
 
 @OutputTimeUnit(TimeUnit.MILLISECONDS)
 @BenchmarkMode({Mode.Throughput, Mode.SingleShotTime})
-@Warmup(iterations = 1)
-@Measurement(iterations = 1)
 @State(Scope.Thread)
-@Threads(2)
-@Fork(2)
+@Threads(1)
 public class RandomStringsTests {
 
     private static final String CHARS_POOL = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890_";
     private static final int LENGTH = 32;
-
+    //Constructor is invoked only once per Fork (right before first Warmup Iteration)
     private Random random = new Random();
 
     @Benchmark
@@ -74,6 +69,9 @@ public class RandomStringsTests {
     public static void main(String[] args) throws RunnerException {
         Options opt = new OptionsBuilder()
                 .include(RandomStringsTests.class.getSimpleName())
+                .warmupIterations(2)
+                .measurementIterations(2)
+                .forks(2)
                 .build();
 
         new Runner(opt).run();
